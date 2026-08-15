@@ -38,6 +38,11 @@ jobs:
       
       - name: Create zip file
         run: |
+          cat > wrangler.toml << 'EOF'
+          name = "cfnew"
+          main = "_worker.js"
+          compatibility_date = "2025-01-01"
+          EOF
           zip Pages.zip _worker.js wrangler.toml
           echo "成功将 '_worker.js' 和 'wrangler.toml' 压缩为 'Pages.zip'"
       

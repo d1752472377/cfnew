@@ -4340,9 +4340,12 @@ async function 处理订阅值(请求241, 用户240 = null) {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content="#05030e">
+        <meta name="color-scheme" content="dark">
             <title>${翻译值.title}</title>
         <style>
             :root {
+                color-scheme: dark;
                 --cp-bg: #05030e;
                 --cp-bg-2: #0a0820;
                 --cp-bg-3: #110835;
@@ -4360,8 +4363,13 @@ async function 处理订阅值(请求241, 用户240 = null) {
                 --cp-border: rgba(0, 240, 255, 0.55);
                 --cp-border-pink: rgba(255, 43, 214, 0.55);
                 --cp-grid: rgba(255, 43, 214, 0.16);
+                --cp-radius: 10px;
+                --cp-radius-sm: 6px;
+                --cp-ease: cubic-bezier(0.22, 1, 0.36, 1);
+                --cp-safe-bottom: env(safe-area-inset-bottom, 0px);
             }
             * { margin: 0; padding: 0; box-sizing: border-box; }
+            html { scroll-behavior: smooth; color-scheme: dark; }
             html, body { min-height: 100%; }
             body {
                 font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
@@ -4370,6 +4378,9 @@ async function 处理订阅值(请求241, 用户240 = null) {
                 min-height: 100vh;
                 overflow-x: hidden;
                 position: relative;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                text-rendering: optimizeLegibility;
             }
             body::before {
                 content: ""; position: fixed; inset: 0;
@@ -4527,6 +4538,15 @@ async function 处理订阅值(请求241, 用户240 = null) {
                     calc(100% - 14px) 100%, 40px 100%,
                     24px calc(100% - 14px), 0 calc(100% - 14px)
                 );
+                transition: border-color 0.3s var(--cp-ease), box-shadow 0.3s var(--cp-ease);
+            }
+            .card:hover {
+                border-color: var(--cp-pink);
+                box-shadow:
+                    0 0 0 1px rgba(0,240,255,0.30),
+                    0 0 28px rgba(255,43,214,0.30),
+                    0 0 70px rgba(255,43,214,0.10),
+                    inset 0 0 26px rgba(255,43,214,0.06);
             }
             .card::after {
                 content: ""; position: absolute; top: 0; left: 0; right: 0;
@@ -4602,6 +4622,11 @@ async function 处理订阅值(请求241, 用户240 = null) {
                 transform: translateY(-2px);
                 text-shadow: 0 0 8px var(--cp-pink);
             }
+            .client-btn:active {
+                transform: translateY(1px) scale(0.98);
+                box-shadow: 0 0 10px rgba(255,43,214,0.45);
+                transition-duration: 0.08s;
+            }
 
             #clientSubscriptionUrl,
             .subscription-url,
@@ -4624,6 +4649,26 @@ async function 处理订阅值(请求241, 用户240 = null) {
                 text-shadow: 0 0 6px var(--cp-mint);
             }
             #clientSubscriptionUrl:empty { display: none !important; }
+            .cp-copy-btn {
+                display: none;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 12px;
+                padding: 9px 16px !important;
+                font-size: 0.78rem !important;
+                letter-spacing: 0.22em !important;
+                color: var(--cp-mint) !important;
+                border-color: var(--cp-mint) !important;
+                background: rgba(0,255,157,0.10) !important;
+                text-shadow: 0 0 8px var(--cp-mint) !important;
+                box-shadow: 0 0 12px rgba(0,255,157,0.30) !important;
+            }
+            .cp-copy-btn:hover {
+                color: #fff !important;
+                background: rgba(0,255,157,0.20) !important;
+                box-shadow: 0 0 18px rgba(0,255,157,0.55) !important;
+            }
 
             .cp-hud {
                 position: fixed; top: 18px; right: 22px;
@@ -4733,6 +4778,9 @@ async function 处理订阅值(请求241, 用户240 = null) {
                 box-shadow: inset 0 0 16px rgba(0,240,255,0.12) !important;
                 position: relative;
                 clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+                gap: 6px 22px;
             }
             #systemStatus > div {
                 color: var(--cp-text) !important;
@@ -4741,8 +4789,11 @@ async function 处理订阅值(请求241, 用户240 = null) {
                 margin: 6px 0 !important;
                 font-size: 0.85rem !important;
                 letter-spacing: 0.05em;
+                line-height: 1.65;
+                word-break: break-word;
             }
             #systemStatus > div:first-child {
+                grid-column: 1 / -1;
                 color: var(--cp-pink) !important;
                 font-weight: 700 !important;
                 letter-spacing: 0.25em !important;
@@ -4764,11 +4815,17 @@ async function 处理订阅值(请求241, 用户240 = null) {
                 transition: border-color 0.2s, box-shadow 0.2s;
                 box-shadow: inset 0 0 8px rgba(0,240,255,0.08) !important;
                 letter-spacing: 0.04em;
+                border-radius: var(--cp-radius-sm) !important;
             }
             input::placeholder { color: var(--cp-text-dim) !important; opacity: 0.7; }
             input:focus, select:focus, textarea:focus {
                 border-color: var(--cp-pink) !important;
                 box-shadow: 0 0 0 1px var(--cp-pink), 0 0 14px rgba(255,43,214,0.4) !important;
+            }
+            :is(button, input, select, textarea, a):focus-visible {
+                outline: 2px solid var(--cp-cyan);
+                outline-offset: 2px;
+                box-shadow: 0 0 0 5px rgba(0,240,255,0.16);
             }
             select option { background: var(--cp-bg-2); color: var(--cp-cyan); }
             input[type="checkbox"], input[type="radio"] {
@@ -4831,6 +4888,18 @@ async function 处理订阅值(请求241, 用户240 = null) {
             button[id="stopLatencyTest"] {
                 color: var(--cp-red) !important;
                 border-color: var(--cp-red) !important;
+            }
+            button:active, input[type="submit"]:active {
+                transform: translateY(1px) scale(0.98) !important;
+                box-shadow: 0 0 10px rgba(255,43,214,0.55) !important;
+                transition-duration: 0.08s !important;
+            }
+            button:disabled {
+                opacity: 0.55;
+                cursor: not-allowed;
+                transform: none !important;
+                box-shadow: none !important;
+                pointer-events: none;
             }
 
             /* Form sub-cards */
@@ -4897,6 +4966,10 @@ async function 处理订阅值(请求241, 用户240 = null) {
             ::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); }
             ::-webkit-scrollbar-thumb {
                 background: linear-gradient(180deg, var(--cp-pink), var(--cp-cyan));
+            }
+            * {
+                scrollbar-color: var(--cp-pink) rgba(0,0,0,0.45);
+                scrollbar-width: thin;
             }
 
             .cp-glitch {
@@ -5239,27 +5312,59 @@ async function 处理订阅值(请求241, 用户240 = null) {
                 animation: cp-pulse-pink 1.6s ease-in-out infinite;
             }
 
+            @media (max-width: 820px) {
+                .container { padding: 104px 16px 150px; }
+                #systemStatus { grid-template-columns: 1fr; }
+                .client-grid { grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 10px; }
+                .cp-hud { display: none; }
+                .header::before, .header::after { font-size: 8px; letter-spacing: 0.18em; }
+            }
             @media (max-width: 720px) {
-                .container { padding: 100px 14px 140px; }
-                .card { padding: 22px 18px; }
-                .header { padding: 22px 18px; }
-                .title { font-size: 2rem; }
-                .cp-hud { font-size: 9px; }
+                .container { padding: 96px 12px 150px; }
+                .card { padding: 20px 14px 22px; }
+                .header { padding: 20px 14px; }
+                .header::before, .header::after { display: none; }
+                .title { font-size: 1.7rem; letter-spacing: 0.04em; }
+                .subtitle { font-size: 0.78rem; letter-spacing: 0.14em; }
+                .card-title { font-size: 0.98rem; letter-spacing: 0.16em; }
+                .cp-lang-wrapper { top: 12px; left: 12px; gap: 6px; }
+                #languageSelector { padding: 6px 8px; font-size: 11px; }
+                .cp-fx-toggle { top: 56px; left: 12px; padding: 5px 9px; font-size: 10px; }
+                .cp-hud { display: none; }
+                input[type="text"], input[type="number"], input[type="password"],
+                select, textarea { font-size: 16px !important; }
+                .client-btn { padding: 12px 10px; font-size: 0.72rem; letter-spacing: 0.10em; }
+                .cp-toast-stack { top: 98px; right: 12px; max-width: calc(100vw - 24px); }
+                .cp-toast { padding: 11px 13px; font-size: 0.78rem; }
                 .cp-action-bar {
                     right: 50%;
-                    bottom: 14px;
+                    bottom: calc(14px + var(--cp-safe-bottom));
                     transform: translateX(50%);
                     gap: 8px;
                 }
                 .cp-fab-save {
                     min-width: 0;
-                    padding: 13px 18px !important;
-                    font-size: 0.8rem !important;
-                    letter-spacing: 0.16em !important;
+                    padding: 14px 16px !important;
+                    font-size: 0.78rem !important;
+                    letter-spacing: 0.14em !important;
+                    gap: 6px;
                 }
-                .cp-action-btn { width: 42px; height: 42px; }
-                .cp-action-status { right: 50%; transform: translate(50%, 8px); }
+                .cp-fab-save .cp-fab-dot { display: none; }
+                .cp-action-btn { width: 40px; height: 40px; font-size: 1rem !important; }
+                .cp-action-status {
+                    right: 50%;
+                    bottom: calc(96px + var(--cp-safe-bottom));
+                    transform: translate(50%, 8px);
+                }
                 .cp-action-status.cp-show { transform: translate(50%, 0); }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                *, *::before, *::after {
+                    animation-duration: 0.01ms !important;
+                    animation-iteration-count: 1 !important;
+                    transition-duration: 0.01ms !important;
+                }
+                html { scroll-behavior: auto; }
             }
         </style>
     </head>
@@ -5302,6 +5407,7 @@ async function 处理订阅值(请求241, 用户240 = null) {
                     <button class="client-btn" onclick="生成客户端链接(atob('djJyYXk='), 'Shadowrocket')">Shadowrocket</button>
                 </div>
                 <div class="subscription-url" id="clientSubscriptionUrl"></div>
+                <button type="button" id="cpCopySubBtn" class="cp-copy-btn">⧉ ${是否值236 ? 'کپی اشتراک' : '复制订阅'}</button>
             </div>
             <div class="card">
                     <h2 class="card-title">${翻译值.systemStatus}</h2>
@@ -5636,7 +5742,7 @@ async function 处理订阅值(请求241, 用户240 = null) {
             
             <div class="card">
                     <h2 class="card-title">${翻译值.relatedLinks}</h2>
-                <div style="text-align: center; margin: 20px 0;">
+                <div style="text-align: center; margin: 20px 0; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; justify-content: center;">
                         <a href="https://github.com/byJoey/cfnew" target="_blank" style="color: #00f0ff; text-decoration: none; margin: 0 20px; font-size: 1.2rem; text-shadow: 0 0 5px #00f0ff;">${翻译值.githubProject}</a>
                         <a href="https://github.com/byJoey/yx-tools/releases/" target="_blank" rel="noopener noreferrer" style="color: #00f0ff; text-decoration: none; margin: 0 20px; font-size: 1.2rem; text-shadow: 0 0 5px #00f0ff;">${翻译值.优选工具}</a>
                     <a href="https://www.youtube.com/@joeyblog" target="_blank" style="color: #00f0ff; text-decoration: none; margin: 0 20px; font-size: 1.2rem; text-shadow: 0 0 5px #00f0ff;">YouTube @joeyblog</a>
@@ -5855,6 +5961,8 @@ function 生成客户端链接(客户端类型, 客户端名称) {
     网址值20190.style.overflowX = "auto";
     网址值20190.style.maxWidth = "100%";
     网址值20190.style.boxSizing = "border-box";
+    var 复制按钮 = document.getElementById('cpCopySubBtn');
+    if (复制按钮) 复制按钮.style.display = 'inline-flex';
     if (客户端名称 === 'V2RAY') {
       navigator.clipboard.writeText(最终网址).then(function () {
         显示提示(显示名称 + " " + 翻译值20207.subscriptionCopied, 'success');
@@ -5892,6 +6000,8 @@ function 生成客户端链接(客户端类型, 客户端名称) {
     网址值20190.style.overflowX = "auto";
     网址值20190.style.maxWidth = "100%";
     网址值20190.style.boxSizing = "border-box";
+    var 复制按钮 = document.getElementById('cpCopySubBtn');
+    if (复制按钮) 复制按钮.style.display = 'inline-flex';
     if (客户端类型 === atob('Y2xhc2g=')) {
       if (客户端名称 === 'STASH') {
         方案网址 = '${解码64('c3Rhc2g6Ly9pbnN0YWxsP3VybD0=')}' + encodeURIComponent(最终网址);
@@ -6602,6 +6712,8 @@ async function 保存配置(配置数据20107) {
     const 结果20102 = await 响应20106.json();
     显示状态(结果20102.message, 结果20102.success ? 'success' : 'error');
     if (结果20102.success) {
+      var 操作条20100 = document.getElementById('cpActionBar');
+      if (操作条20100) 操作条20100.classList.remove('cp-dirty');
       await 加载当前配置();
       // 更新wk地区选择状态
       更新工作器地区状态();
@@ -6865,6 +6977,27 @@ document.addEventListener('DOMContentLoaded', function () {
   function 标记已修改() {
     if (值操作值) 值操作值.classList.add('cp-dirty');
   }
+  // 未保存离开提醒
+  window.addEventListener('beforeunload', function (事件值20074) {
+    if (值操作值 && 值操作值.classList.contains('cp-dirty')) {
+      事件值20074.preventDefault();
+      事件值20074.returnValue = '${是否值236 ? 'تنظیمات ذخیره نشده‌اند، مطمئن هستید که می‌خواهید خارج شوید؟' : '配置尚未保存，确定要离开吗？'}';
+      return 事件值20074.returnValue;
+    }
+  });
+  // 订阅链接复制按钮
+  const 复制订阅按钮 = document.getElementById('cpCopySubBtn');
+  if (复制订阅按钮) 复制订阅按钮.addEventListener('click', async function () {
+    const 订阅文本 = document.getElementById('clientSubscriptionUrl');
+    if (!订阅文本 || !订阅文本.textContent) return;
+    try {
+      await navigator.clipboard.writeText(订阅文本.textContent);
+      显示提示(翻译值20207.subscriptionCopied, 'success');
+      复制订阅按钮.style.display = 'inline-flex';
+    } catch (复制错误) {
+      显示提示('${是否值236 ? 'کپی ناموفق بود' : '复制失败'}', 'error');
+    }
+  });
   const 已修改范围 = document.getElementById('configContent') || document;
   ['input', 'change'].forEach(function (本地值20079) {
     已修改范围.addEventListener(本地值20079, function (事件值20078) {

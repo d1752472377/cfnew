@@ -31,6 +31,19 @@
   - 面板标签由「降级控制」改为「出站方式」，选项文案重写
 - 详见「[出站代理](#出站代理)」
 
+### 管理面板体验优化
+
+- 视觉升级：统一的深色主题与设计变量、状态面板栅格化布局、卡片悬浮反馈、更细腻的按钮按压/禁用/键盘焦点状态
+- 移动端优化：小屏下自动隐藏 HUD、输入框字号防 iOS 自动缩放、底部操作条适配安全区
+- 交互增强：订阅链接旁新增「复制订阅」按钮；修改配置后未保存离开页面会弹出提醒；保存成功自动清除未保存标记
+- 无障碍与性能：支持 `prefers-reduced-motion` 减少动画、Firefox 细滚动条、`color-scheme: dark`
+
+### 混淆方案升级
+
+- 部署文件 `少年你相信光吗` 改为**三阶段构建**：terser 压缩 → javascript-obfuscator 强化混淆（控制流平坦化 + 死代码注入 + 字符串数组编码，关闭 `selfDefending`/`debugProtection` 以保证 Workers 兼容）→ terser 二次压缩
+- 构建脚本：`node build-obfuscate.js [控制流阈值] [死代码阈值]`，默认 `0.5 0.2`；也可用 `npm run build` / `npm run build:light` / `npm run build:strong`
+- 推送 `明文源吗` 后 GitHub Actions 自动重建并提交混淆产物，Workers 部署请直接使用 `少年你相信光吗`
+
 ## v2.9.8c 更新
 
 - 订阅转换内部实现：Clash / Stash / Sing-box / Surge / Loon / Quantumult X 配置全部由 Worker 直接生成，不再依赖任何外部 sub-converter
@@ -118,6 +131,10 @@
 ### 部署
 
 订阅每15分钟自动优选一次
+
+- **Workers 部署**：直接把混淆产物 `少年你相信光吗` 粘贴到 Workers 编辑器，或用 `npx wrangler deploy` 部署
+- **本地重建混淆产物**：`npm ci && npm run build`（也可用 `npm run build:light` 减小体积、`npm run build:strong` 强化混淆）
+- 开源版 `明文源吗` 为同逻辑明文源码，便于阅读与二开；GitHub Actions 会在推送后自动重建 `少年你相信光吗`
 
 #### 基础配置
 | 变量名 | 值 | 说明 |
